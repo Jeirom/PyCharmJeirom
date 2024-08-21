@@ -15,3 +15,5 @@ def get_mask_account(account_number: Union[str]) -> str:
         return f"{'*' * 2}{account_number[-4:]}"
     else:
         return "Ошибка. Неверное количество цифр."
+
+#Тест для гита
