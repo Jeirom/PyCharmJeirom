@@ -1,6 +1,6 @@
 from typing import Union
 
-from masks import get_mask_account, get_mask_card_number
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(user_number: Union[str]) -> str:
@@ -30,5 +30,4 @@ def get_date(time: Union[str]) -> str:
     return f"{time[8:10]}.{time[5:7]}.{time[0:4]}"
 
 
-
-#Тест для PR
+# Тест для PR
