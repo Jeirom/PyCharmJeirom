@@ -32,4 +32,3 @@ def get_date(time: Union[str]) -> str:
     else:
         return f"{time[8:10]}.{time[5:7]}.{time[0:4]}"
 
-print(get_date('12345645678910'))

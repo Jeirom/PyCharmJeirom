@@ -1,7 +1,9 @@
-import pytest
+from src.widget import get_date, mask_account_card
 
-from src.widget import mask_account_card,get_date
 
 def test_mask_account_card(user_number):
-    assert mask_account_card(user_number) == 'Счет **7890'
+    assert mask_account_card(user_number) == "Счет **7890"
+
+def test_get_date(input_time):
+    assert get_date(input_time) == "31.12.2023"
 

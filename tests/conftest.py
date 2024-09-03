@@ -46,3 +46,7 @@ def bad_account_number():
 @pytest.fixture
 def amazing_date():
     return '12345678910'
+
+@pytest.fixture
+def input_time():
+    return "2023-12-31"
