@@ -27,7 +27,8 @@ def mask_account_card(user_number: Union[str]) -> str:
 
 def get_date(time: Union[str]) -> str:
     """Функция сортирует полученную дату и время, выводит в хх.хх.хххх формате"""
-    return f"{time[8:10]}.{time[5:7]}.{time[0:4]}"
+    if time == int:
+        raise TypeError
+    else:
+        return f"{time[8:10]}.{time[5:7]}.{time[0:4]}"
 
-
-# Тест для PR
