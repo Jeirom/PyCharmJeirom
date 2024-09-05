@@ -50,3 +50,11 @@ def amazing_date():
 @pytest.fixture
 def input_time():
     return "2023-12-31"
+
+@pytest.fixture
+def card_number_generator():
+    """Функция генерирует номер карты для юзера, начиная с 0000 0000 0000 0001 и заканчивая девятками"""
+    number = 1
+    while number < 10**16:
+        yield str(number).zfill(16)
+        number += 1
