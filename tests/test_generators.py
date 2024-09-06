@@ -39,9 +39,10 @@ def test_filter_by_currency(transactions: list[dict]) -> None:
         next(result)
 
 
-#def test_filter_by_currency_raise() -> None:
+# def test_filter_by_currency_raise() -> None:
 #    generator = filter_by_currency()
 #    assert generator == TypeError
+
 
 def test_filter_by_currency_not_currency(transactions: list[dict]) -> None:
     generator = filter_by_currency(transactions, "EUR")
@@ -67,14 +68,18 @@ def test_transaction_descriptions_empty(transactions: list[dict]) -> None:
     descriptions = transaction_descriptions([])
     assert list(descriptions) == []
 
-@pytest.mark.parametrize("transaction_list, expected",
-[([{"description": "Payment 1"}, {"description": "Payment 2"}], ["Payment 1", "Payment 2"]),
-([{"description": "Purchase 1"}, {"description": "Purchase 2"}], ["Purchase 1", "Purchase 2"]),
-([{"description": "Expense 1"}, {"description": "Expense 2"}], ["Expense 1", "Expense 2"])])
+
+@pytest.mark.parametrize(
+    "transaction_list, expected",
+    [
+        ([{"description": "Payment 1"}, {"description": "Payment 2"}], ["Payment 1", "Payment 2"]),
+        ([{"description": "Purchase 1"}, {"description": "Purchase 2"}], ["Purchase 1", "Purchase 2"]),
+        ([{"description": "Expense 1"}, {"description": "Expense 2"}], ["Expense 1", "Expense 2"]),
+    ],
+)
 def test_transaction_descriptions(transaction_list, expected):
     result = list(transaction_descriptions(transaction_list))
     assert result == expected
-
 
 
 # Тестирование функции card_number_generator
