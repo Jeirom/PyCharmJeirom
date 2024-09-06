@@ -1,102 +1,31 @@
-import random
-
-from tests.conftest import number
-
-transactions = [
-{
-"id": 939719570,
-"state": "EXECUTED",
-"date": "2018-06-30T02:08:58.425572",
-"operationAmount": {
-"amount": "9824.07",
-"currency": {
-"name": "USD",
-"code": "USD"
-}
-},
-"description": "Перевод организации",
-"from": "Счет 75106830613657916952",
-"to": "Счет 11776614605963066702"
-},
-{
-"id": 123456789,
-"state": "PENDING",
-"date": "2019-07-15T10:30:45.123456",
-"operationAmount": {
-"amount": "5000.00",
-"currency": {
-"name": "EUR",
-"code": "EUR"
-}
-},
-"description": "Оплата услуг",
-"from": "Счет 12345678901234567890",
-"to": "Счет 09876543210987654321"
-}
-]
+from typing import Iterator
 
 
+def filter_by_currency(transaction_list: list[dict], code_of_currency: str) -> Iterator:
+    """Функция возвращает итератор, соответствующий заданной валюте"""
+    if not transaction_list:
+        raise TypeError("Список транзакций пустой!")
+
+    filtred_transactions = filter(
+        lambda transaction: transaction.get("operationAmount").get("currency").get("code") == code_of_currency,
+        transaction_list,
+    )
+    return filtred_transactions
 
 
-
-def filter_by_currency(transactions:list, currency:str) -> dict:
-    """Функция фильтрует входной список словарей, проходит до нужных данных, выводит только те словари, которые
-    проходят под условия задачи"""
-    for transaction in transactions:
-        if transaction["operationAmount"]["currency"]["code"] == currency:
-            yield transaction
-
-
-
-
-filtered_transactions = filter_by_currency(transactions, "USD")
-for transaction in filtered_transactions:
-    print(transaction)
-
-
-def transaction_descriptions(transactions:list) -> dict:
-    """функция выводит данные пользователя о платежах"""
-    for transaction in transactions:
+def transaction_descriptions(transaction_list: list[dict]) -> Iterator:
+    """Функция возвращает описания для транзакций"""
+    for transaction in transaction_list:
         yield transaction["description"]
 
 
-descriptions = transaction_descriptions(transactions)
-for _ in range(1):
-    print(next(descriptions))
-
-
-transactions = [
-{
-"id": 939719570,
-"state": "EXECUTED",
-"date": "2018-06-30T02:08:58.425572",
-"operationAmount": {
-"amount": "9824.07",
-"currency": {
-"name": "USD",
-"code": "USD"
-}
-},
-"description": "Перевод организации",
-"from": "Счет 75106830613657916952",
-"to": "Счет 11776614605963066702"
-},
-{
-"id": 123456789,
-"state": "PENDING",
-"date": "2019-07-15T10:30:45.123456",
-"operationAmount": {
-"amount": "5000.00",
-"currency": {
-"name": "EUR",
-"code": "EUR"
-}
-},
-"description": "Оплата услуг",
-"from": "Счет 12345678901234567890",
-"to": "Счет 09876543210987654321"
-}
-]
-
+def card_number_generator(start: int, stop: int) -> Iterator[str]:
+    """Генератор номеров карт формата 'ХХХХ ХХХХ ХХХХ ХХХХ' в заданном числовом диапозоне"""
+    if not isinstance(start, (int | float)) or not isinstance(stop, (int | float)):
+        raise TypeError("Ошибка типа данных")
+    for x in range(start, stop + 1):
+        card_number = f"{x:016}"
+        formatted_number = f"{card_number[:4]} {card_number[4:8]} {card_number[8:12]} {card_number[12:]}"
+        yield formatted_number
 
 
