@@ -1,32 +1,43 @@
+from fileinput import filename
 from functools import wraps
 from typing import Any, Callable
+import os
 
 
+def log(filename=None):
+    """Декоратор регистрирует детали выполнения функций"""
 
-def log(filename: Any) -> Callable:
-    """Логирует вызов функции и ее результат в файл или в консоль"""
+    def wrapper(func):
 
-    def decorator(func: Callable) -> Callable:
-        @wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            result = func(*args, **kwargs)
+        def inner(*args, **kwargs):
             try:
-                result == sum(args)
-                filename.write("my_function ok")
-                print("my_function ok")
+                result = func(*args, **kwargs)
+                if filename is None:
+                    print(f"{func.__name__} ok")
+                else:
+                    if len(filename) > 0:
+                        path_to_file = os.path.join(os.path.dirname(__file__), "../logs", filename)
+                        with open(path_to_file, "w", encoding="utf-8") as file:
+                            file.write(f"{func.__name__} ok")
+                return result
             except Exception as e:
-                filename.write(f"my_function error: {e}. Inputs:{args}, {kwargs}")
-                print(f"my_function error: {e}. Inputs:{args}, {kwargs}")
-            return result
+                if filename is None:
+                    print(f"{func.__name__} error: {e}. Inputs: ({args}), {kwargs}")
+                else:
+                    path_to_file = os.path.join(os.path.dirname(__file__), "../logs", filename)
+                    with open(path_to_file, "w", encoding="utf-8") as file:
+                        file.write(f"{func.__name__} error: {e}. Inputs: ({args}), {kwargs}")
 
-        return wrapper
+        return inner
 
-    return decorator
+    return wrapper
 
 
-@log(filename="mylog.txt")
-def my_function(x: int, y: int) -> int:
+@log(None)
+def my_function(x, y):
+    # raise ValueError("Something went wrong")
     return x + y
 
 
-my_function(1,2)
+my_function(1,1)
+
