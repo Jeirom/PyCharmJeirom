@@ -1,29 +1,20 @@
-def number_double(x):
-    return [x,x]
+import os
+from dotenv import load_dotenv
+import requests
 
-result = list(map(number_double, range(10)))
-print(result)
+# Загрузка переменных из .env-файла
+load_dotenv()
 
+# Получение значения переменной GITHUB_TOKEN из .env-файла
+github_token = os.getenv('GITHUB_TOKEN')
 
+# Создание заголовка с токеном доступа API
+headers = {
+    'Authorization': f'token {github_token}'
+}
 
-result = [x for num in range(20) for x in [num, num] if num % 2 == 0]
+# Отправка GET-запроса к API
+response = requests.get('https://api.github.com/user', headers=headers)
 
-cubes = [x*x for x in range(11) if x % 2 == 0]
-print(cubes)
-
-ssps = [1,2,3,4,5,6,7,8,9,10]
-
-summa = [x*2 for x in ssps if x > 0]
-print(sum(summa))
-
-vowels = (x for x in "hello" if x in ['a', 'e', 'i', 'o', 'u'])
-
-
-
-
-import random
-
-def random_number_generator(start, stop):
-    while True:
-        yield random.randint(start, stop)
-
+# Обработка ответа
+print(response.json())
