@@ -47,3 +47,6 @@ def test_get_mask_card_number(number_card, expected):
 )
 def test_get_mask_account(account_number, expected):
     assert get_mask_account(account_number) == expected
+
+
+
