@@ -24,7 +24,7 @@ def financial_transactions(path: str) -> list:
                 file_transaction_logger.info('Func ok')
                 transactions = json.load(financial_file)
 
-            except JSONDecodeError:
+            except json.JSONDecodeError:
 
                 file_transaction_logger.critical('JSONDecodeError')
                 return []
@@ -53,3 +53,4 @@ def transaction_amount(trans: dict, currency: str = "RUB") -> Any:
         amount = currency_conversion(trans)
         transaction_amount_logger.info('API request sent')
     return amount
+
