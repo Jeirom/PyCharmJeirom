@@ -142,3 +142,7 @@ def customer_details() -> list[str]:
 @pytest.fixture
 def enter_data() -> list[str]:
     return ["2024-03-11T02:26:18.671407", "2018-06-30T02:08:58.425572", "2018-09-12T21:27:25.241689"]
+
+@pytest.fixture
+def file_error():
+    return 123

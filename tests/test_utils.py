@@ -94,3 +94,4 @@ def test_transaction_amount(trans):
 def test_transaction_amount_non_rub(mock_currency_conversion, trans_1):
     mock_currency_conversion.return_value = 1000.0
     assert transaction_amount(trans_1) == 1000.0
+

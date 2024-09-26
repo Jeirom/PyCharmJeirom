@@ -1,5 +1,7 @@
+import csv
 import datetime
 import logging
+from idlelib.iomenu import encoding
 from typing import Any
 
 import pandas as pd
@@ -20,7 +22,7 @@ transaction_log = logging.getLogger("DISTRIBUTOR logs")
 def distributor_file(file_path: str) -> Any:
     """Функция принимает на вход файл формата CSV, JSON, XLSX, обрабатывает и открывает"""
     time_start = datetime.datetime.now()
-    transaction_log.info("Func start")
+    # transaction_log.info("Func start")
 
     try:
 
@@ -30,8 +32,8 @@ def distributor_file(file_path: str) -> Any:
 
         elif file_path.endswith(".csv"):
             with open(file_path) as file:
-                transactions = pd.DictReader(file, delimiter=";")
-                return transactions
+                transactions = csv.reader(file, delimiter=";")
+                return list(transactions)
 
         elif file_path.endswith(".xlsx"):
             excel_data = pd.read_excel(file_path)
@@ -41,9 +43,9 @@ def distributor_file(file_path: str) -> Any:
         transaction_log.error(f"Error : {e}")
         return []
 
-    finally:
-        time_stop = datetime.datetime.now()
-        transaction_log.debug(f"The function worked in {time_stop-time_start} second")
+    # finally:
+        # time_stop = datetime.datetime.now()
+        # transaction_log.debug(f"The function worked in {time_stop-time_start} second")
 
 
-print(distributor_file("transactions.csv"))
+print(distributor_file("operations.json"))

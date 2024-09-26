@@ -1,36 +1,45 @@
-from unittest import TestCase, mock
-from unittest.mock import patch
-from main import distributor_file
-import pandas as pd
-import io
+import unittest
+from unittest.mock import Mock, patch
+from src.utils_csv_excel import distributor_file
+from src.utils import financial_transactions
 
+class TestDistributorFile(unittest.TestCase):
 
-class TestDistributorFile(TestCase):
+@patch("distributor.csv.reader")
+def test_csv_file(self, mock_csv_reader):
+    mock_csv_reader.return_value = [["header1", "header2"], ["data1", "data2"]]
+    result = distributor_file("test.csv")
+    self.assertEqual(result, [["header1", "header2"], ["data1", "data2"]])
 
-    @patch('builtins.open')
-    @patch('csv.DictReader')
-    def test_CSV_file(self, mock_dict_reader, mock_open):
-        mock_dict_reader.return_value = [{'transaction_id': '1', 'amount': '100'},
-                                         {'transaction_id': '2', 'amount': '200'}]
-        mock_open.return_value = io.StringIO("transaction_id;amount\n1;100\n2;200\n")
+@patch("distributor.pd.read_excel")
+def test_xlsx_file(self, mock_read_excel):
+    mock_read_excel.return_value = "Mock excel data"
+    result = distributor_file("test.xlsx")
+    self.assertEqual(result, "Mock excel data")
+@patch("distributor.financial_transactions")
+def test_json_file(self, mock_financial_transactions):
+        result = distributor_file("test.json")
+        mock_financial_transactions.assert_called_once_with("test.json")
 
-        result = distributor_file('example.csv')
+@patch("distributor.datetime")
+@patch("distributor.transaction_log")
+def test_exception_handling(self, mock_transaction_log, mock_datetime):
+    mock_datetime.datetime.now.side_effect = [Mock(), Mock()]
+    mock_transaction_log.info = Mock()
+    mock_open = Mock()
+    mock_open.side_effect = Exception("File not found")
 
-        self.assertIsNotNone(result)
-        self.assertEqual(len(result), 2)
-        self.assertIsInstance(result, mock.MagicMock)
+    with patch("builtins.open", mock_open):
+            result = distributor_file("test.txt")
+            mock_transaction_log.error.assert_called_once_with("Error : File not found")
+            self.assertEqual(result, [])
 
-    @patch('pandas.read_excel')
-    def test_XLSX_file(self, mock_read_excel):
-        mock_read_excel.return_value = pd.DataFrame({'transaction_id': [1, 2], 'amount': [100, 200]})
-
-        result = distributor_file('example.xlsx')
-
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, pd.DataFrame)
-
-    @patch('utils.financial_transactions')
-    def test_JSON_file(self, mock_financial_transactions):
-        result = distributor_file('example.json')
-
-        mock_financial_transactions.assert_called_once_with('example.json')
+# @patch("distributor.datetime")
+# @patch("distributor.transaction_log")
+# def test_finally_block(self, mock_transaction_log, mock_datetime):
+#     mock_datetime.datetime.now.side_effect = [Mock(), Mock()]
+#     mock_transaction_log.debug = Mock()
+#
+#     assert result = distributor_file("test.xlsx")
+#
+#     mock_transaction_log.debug.assert_called_once_with("The function worked in 0:00:00 second")
