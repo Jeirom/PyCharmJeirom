@@ -1,9 +1,12 @@
 import unittest
 from unittest.mock import Mock, patch
-from src.utils_csv_excel import distributor_file
+
 from src.utils import financial_transactions
+from src.utils_csv_excel import distributor_file
+
 
 class TestDistributorFile(unittest.TestCase):
+
 
 @patch("distributor.csv.reader")
 def test_csv_file(self, mock_csv_reader):

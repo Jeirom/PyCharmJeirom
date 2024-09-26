@@ -7,10 +7,8 @@ def test_masks_len(my_number, problem_number):
     assert get_mask_card_number(my_number) == "1234 56** **** 3456"
 
 
-
 def test_len_account_card(my_number):
     assert get_mask_account(my_number) == "Мало цифр"
-
 
 
 def test_get_mask_card_number_bad(bad_card_number):
@@ -47,6 +45,3 @@ def test_get_mask_card_number(number_card, expected):
 )
 def test_get_mask_account(account_number, expected):
     assert get_mask_account(account_number) == expected
-
-
-

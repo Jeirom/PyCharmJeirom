@@ -31,4 +31,3 @@ def get_date(time: Union[str]) -> str:
         raise TypeError
     else:
         return f"{time[8:10]}.{time[5:7]}.{time[0:4]}"
-
