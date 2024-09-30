@@ -1,10 +1,7 @@
 import csv
-# import datetime
 import logging
 from typing import Any
-
 import pandas as pd
-
 from utils import financial_transactions
 
 # Основная конфигурация logging
@@ -47,4 +44,4 @@ def distributor_file(file_path: str) -> Any:
     # transaction_log.debug(f"The function worked in {time_stop-time_start} second")
 
 
-print(distributor_file("operations.json"))
+# print(distributor_file("../data/operations.json"))
