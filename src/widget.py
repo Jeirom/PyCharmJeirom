@@ -31,6 +31,8 @@ def get_date(time: Union[str]) -> str:
         raise TypeError
     else:
         return f"{time[8:10]}.{time[5:7]}.{time[0:4]}"
+
+
 # def date_formatting(date_string: str) -> str:
 #     """Функция получает дату и время в ISO формате и выводит в соответствии с шаблоном: 'day.month.year'"""
 #     # Преобразуем ISO строку в объект datetime.

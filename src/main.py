@@ -1,11 +1,10 @@
-# Импортирование необходимых для программы функций из разработанных модулей
-
+from src.masks import get_mask_account
+from src.processing import date_sort_func, state_func
 from src.read_from_csv import read_from_csv
-from src.processing import state_func, date_sort_func
 from src.sorting_transactions import sorting_transactions_by_description
 from src.utils import get_transactions_data
 from src.widget import *
-from src.masks import get_mask_account
+
 
 def main() -> None:
     """Функция, определяющая работу с конечным пользователем разработанной программы.
@@ -73,7 +72,7 @@ def main() -> None:
     elif users_choise_date_sort == "нет":
         date_sorted_transactions = filtred_transaction_data
     # Фильтрация по рублёвым транзакциям
-    print(date_sorted_transactions)
+
     while True:
         print("Выводить только рублёвые транзакции?")
         users_choise_rub = input("Введите да/нет сюда: ").lower()
@@ -83,7 +82,9 @@ def main() -> None:
             print("Введён некорректный ответ. Повторите ввод ответа.")
     if users_choise_rub == "да":
         rub_transactions = [
-            transaction for transaction in date_sorted_transactions if transaction["operationAmount"]["currency"]["code"] == "RUB"
+            transaction
+            for transaction in date_sorted_transactions
+            if transaction["operationAmount"]["currency"]["code"] == "RUB"
         ]
     elif users_choise_rub == "нет":
         rub_transactions = date_sorted_transactions
@@ -127,6 +128,8 @@ def main() -> None:
             )
 
     # if count_of_transactions > 0:
+
+
 #         print("Распечатываю итоговый список транзакций...\n")
 #         print(f"Всего банковских операций в выборке {count_of_transactions}.\n")
 #         for item in result_transactions:

@@ -1,7 +1,9 @@
 import csv
 import logging
 from typing import Any
+
 import pandas as pd
+
 from utils import financial_transactions
 
 # Основная конфигурация logging

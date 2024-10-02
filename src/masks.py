@@ -29,4 +29,3 @@ def get_mask_account(macc_number: str) -> str:
     mask_account = "**" + macc_number[-4:]
     auth_logger.info(f"Маска счета{mask_account}")
     return mask_account
-
