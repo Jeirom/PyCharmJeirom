@@ -1,6 +1,3 @@
-from fileinput import filename
-from functools import wraps
-from typing import Any, Callable
 import os
 
 
@@ -37,7 +34,3 @@ def log(filename=None):
 def my_function(x, y):
     # raise ValueError("Something went wrong")
     return x + y
-
-
-my_function(1,1)
-

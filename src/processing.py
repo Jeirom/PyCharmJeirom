@@ -1,21 +1,15 @@
-def filter_by_state(data: list, state: str = "EXECUTED") -> list:
-    """Функция возвращает новый список словарей,
-    содержащий только те словари, у которых ключ
-        state соответствует указанному значению."""
-    filtered_list = []
-    if state != "":
-        for d in data:
-            if d.get("state") == state:
-                filtered_list.append(d)
-        return filtered_list
-    else:
-        return ["Ошибка"]
+from datetime import datetime
+from typing import List
 
 
-def sort_by_date(list_of_dicts: list, reverse: bool = True) -> list:
-    """Функция должна возвращать новый список,
-    отсортированный по дате (date)."""
-    sorted_list = []
-    for d in sorted(list_of_dicts, key=lambda x: x["date"], reverse=reverse):
-        sorted_list.append(d)
-    return sorted_list
+def state_func(dict_list: List[dict], state: str = "EXECUTED") -> List[dict]:
+    """Функция принимает список словарей и занчение ключа 'state' по-умолчанию равного 'EXECUTED'.
+    Вщзвращает список словарей с ключом 'state' равным заданному значению"""
+    return [dictionary for dictionary in dict_list if dictionary.get("state") == state]
+
+
+def date_sort_func(dict_list: List[dict], direction: bool = True) -> List[dict]:
+    """Функция принимает список словарей и необязательное значение направления сортировки - возрастание либо убывание.
+    По-умолчанию необязательный параметр равен 'False' - убывание.
+    Возвращает отсортированный  согласно направлению сортировки список словарей."""
+    return sorted(dict_list, key=lambda x: datetime.fromisoformat(x["date"]), reverse=direction)

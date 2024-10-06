@@ -1,55 +1,74 @@
 import json
 import logging
-from json import JSONDecodeError
-from external_api import currency_conversion
-from typing import Any
-#Основная конфигурация logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filename='../logs/application.log',  # Запись логов в файл
-                    filemode='w')  # Перезапись файла при каждом запуске
+import os
 
-file_transaction_logger = logging.getLogger('app.decode.file')
-transaction_amount_logger = logging.getLogger('app.transaction.amount')
+# Получаем путь к директории src
+SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Получаем путь к корневой директории проекта (на одну директорию выше src)
+BASE_DIR = os.path.dirname(SRC_DIR)
+
+# Создаем путь до директории logs в корне проекта
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+
+# Проверяем, существует ли директория logs, если нет - создаем
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+# Указываем путь до файла с логами
+log_file = os.path.join(LOG_DIR, "utils_logger")
+
+# Основная конфигурация logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    filename=log_file,  # Запись логов в файл
+    filemode="w",
+)  # Перезапись файла при каждом запуске
+
+# Создаем логер для компонентов программы
+trans_data_loger = logging.getLogger("trans.data.loger")
 
 
-def financial_transactions(path: str) -> list:
-    """Функция принимает на вход путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях."""
+def get_transactions_data(file_path: str) -> list:
+    """Функция, которая принимает на вход путь до JSON-файла
+    и возвращает список словарей с данными о финансовых транзакциях."""
+
+    trans_data_loger.info(f"Start file processing: {file_path}")  # Начало обработки файла
+
     try:
+        with open(file_path, "r", encoding="utf-8") as f:
 
-        with open(path, encoding="utf-8") as financial_file:
-            file_transaction_logger.info(f'open file {path}')
-            try:
+            trans_data_loger.info(f"File {file_path} successfully opened")  # Файл {file_path} успешно открыт
 
-                file_transaction_logger.info('Func ok')
-                transactions = json.load(financial_file)
+            transactions_json_data = json.load(f)
 
-            except JSONDecodeError:
+            trans_data_loger.info(f"File {file_path} successfully read")  # Файл {file_path} успешно прочитан
 
-                file_transaction_logger.critical('JSONDecodeError')
+            if isinstance(transactions_json_data, list):
+
+                trans_data_loger.info(
+                    f"File {file_path} contains correct data"
+                )  # Файл {file_path} содержит корректные данные
+
+                return transactions_json_data
+
+            else:
+                trans_data_loger.warning(
+                    f"File {file_path} does not contain a list of transactions"
+                )  # Файл {file_path} не содержит список транзакций
+
                 return []
 
-        if not isinstance(transactions, list):
+    except (json.JSONDecodeError, OSError):
+        trans_data_loger.error(
+            f"Decoding error JSON in file {file_path}"
+        )  # Ошибка декодирования JSON в файле {file_path}
 
-            return []
-
-        return transactions
-
-    except FileNotFoundError as e:
-
-        file_transaction_logger.critical(f'Error {e}')
         return []
 
 
-
-def transaction_amount(trans: dict, currency: str = "RUB") -> Any:
-    """Функция принимает на вход транзакцию и возвращает сумму транзакции в рублях"""
-    if trans["operationAmount"]["currency"]["code"] == currency:
-        transaction_amount_logger.info('Func ok!')
-        amount = trans["operationAmount"]["amount"]
-
-    else:
-
-        amount = currency_conversion(trans)
-        transaction_amount_logger.info('API request sent')
-    return amount
+if __name__ == "__main__":
+    file_path = "data\\operations.json"
+    transactions = get_transactions_data(file_path)
+    print(transactions)
